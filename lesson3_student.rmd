@@ -21,10 +21,10 @@ pf = read.delim('pseudo_facebook.tsv')
 Notes:
 
 ```{r Histogram of Users\' Birthdays}
-install.packages('ggplot2')
-library(ggplot2)
-install.packages('ggthemes', dependencies = TRUE) 
-library(ggthemes) 
+#install.packages('ggplot2')
+#library(ggplot2)
+#install.packages('ggthemes', dependencies = TRUE) 
+#library(ggthemes) 
 
 theme_set(theme_minimal(24)) 
 
@@ -325,7 +325,7 @@ Notes:
 
 qplot(x = gender, y = friend_count, 
       data = subset(pf, !is.na(gender)),
-      geom = 'boxplot')S
+      geom = 'boxplot')
 
 ```
 
