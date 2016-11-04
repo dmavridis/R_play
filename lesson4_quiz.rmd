@@ -1,0 +1,83 @@
+
+```{r}
+# Importing the dataset
+
+library(ggplot2)
+
+diamonds = read.csv('diamonds.csv')
+data(diamonds)
+
+ggplot(aes(x, price), data = diamonds) +
+  geom_point()
+
+
+cor.test(diamonds$price, diamonds$x, method = 'pearson')
+cor.test(diamonds$price, diamonds$y, method = 'pearson')
+cor.test(diamonds$price, diamonds$z, method = 'pearson')
+
+ggplot(aes(depth, price), data = diamonds) +
+  geom_point(alpha = 1/2)
+
+cor.test(diamonds$price, diamonds$depth, method = 'pearson')
+
+ggplot(aes(carat, price), 
+       data = subset(diamonds, carat < 0.99*max(carat) & price < 0.99*max(price))) +
+  geom_point()
+
+
+diamonds$volume = with(diamonds, x*y*z)
+ggplot(aes(volume, price), data = diamonds) +
+  geom_point()
+
+
+diamond2 = subset(diamonds, volume > 0 & volume <=800 )
+cor.test(diamond2$price, diamond2$volume, method = 'pearson')
+# better
+with(subset(diamonds, volume > 0 & volume <=800), cor.test(price, volume))
+
+ggplot(aes(volume, price), 
+       data = subset(diamonds, volume > 0 & volume <=800 )) +
+    geom_point() +
+    xlim(0,400) +
+    geom_smooth(method = 'lm', color = 'red')
+
+library(dplyr)
+
+diamondsByClarity = diamonds %>% 
+  group_by(clarity) %>%
+  summarise(mean_price = mean(price),
+          median_price = median(price),
+          min_price = min(price),
+          max_price = max(price),
+          n = n())
+
+
+diamonds_by_clarity <- group_by(diamonds, clarity)
+diamonds_mp_by_clarity <- summarise(diamonds_by_clarity, mean_price = mean(price))
+
+diamonds_by_color <- group_by(diamonds, color)
+diamonds_mp_by_color <- summarise(diamonds_by_color, mean_price = mean(price))
+
+diamonds_by_cut <- group_by(diamonds, cut)
+diamonds_mp_by_cut <- summarise(diamonds_by_cut, mean_price = mean(price))
+
+library(gridExtra)
+
+p1 = ggplot(aes(clarity, mean_price), data = diamonds_mp_by_clarity) +
+  geom_point()
+p2 = ggplot(aes(color, mean_price), data = diamonds_mp_by_color) +
+  geom_point()
+p3 = ggplot(aes(cut, mean_price), data = diamonds_mp_by_cut) +
+  geom_point()
+
+
+grid.arrange(p1, p2,p3, ncol = 1)
+
+
+
+
+
+
+
+
+```
